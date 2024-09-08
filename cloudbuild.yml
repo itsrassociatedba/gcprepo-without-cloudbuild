@@ -2,5 +2,7 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 steps:
-  - name: 'ubuntu'
-    args: ['echo','Hello Security Gurus!! This is the first build run in Google Cloud Platform']
+  #Execute SonarCloud Scan
+  - name: maven:3-openjdk-18-slim
+    entrypoint: mvn
+    args: ['verify', 'sonar:sonar','-Dsonar.host.url=https://sonarcloud.io','-Dsonar.organization=itsrassociatedba','-Dsonar.projectKey=gcprepo-without-cloudbuild','-Dsonar.login=584de5b42cfdb87afdb4579273df53b24911ec45']
