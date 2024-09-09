@@ -1,8 +1,17 @@
 options:
   logging: CLOUD_LOGGING_ONLY
 
-steps:
-  #Execute SonarCloud Scan
-  - name: maven:3-openjdk-18-slim
-    entrypoint: mvn
-    args: ['verify', 'sonar:sonar','-Dsonar.host.url=https://sonarcloud.io','-Dsonar.organization=itsrassociatedba','-Dsonar.projectKey=gcprepo-without-cloudbuild','-Dsonar.login=584de5b42cfdb87afdb4579273df53b24911ec45']
+
+steps:   
+  #Run Software Composition Analysis (SCA security scan) using Snyk
+  - name: 'ubuntu'
+    entrypoint: bash
+    args: 
+        - '-c'
+        - |-
+          apt-get update
+          apt-get -y install maven 
+          SNYK_TOKEN=${_SNYK_TOKEN}
+          export SNYK_TOKEN
+          mvn snyk:test -fn 
+    id: Snyk SCA
